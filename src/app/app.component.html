@@ -1,0 +1,88 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" (click)="activateCam()">
+  Foto CLiente
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"> Foto Cliente</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div style="text-align:center">
+            <div>
+              <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                      [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+                      [videoOptions]="videoOptions"
+                      [imageQuality]="1"
+                      (cameraSwitched)="cameraWasSwitched($event)"
+                      (initError)="handleInitError($event)"
+              ></webcam>
+              <form action="">
+              <div class="row form-group align-items-center">
+                <br/>
+                <button class="actionBtn form-control col-md-4" (click)="triggerSnapshot();" data-toggle="modal" data-target="#myModal2" (click)="deactivateCam()" >Tomar Foto</button>
+                <button class="actionBtn form-control col-md-3" (click)="toggleWebcam();">Cambiar</button>
+                <br/>
+                <button class="actionBtn form-control col-md-3" (click)="showNextWebcam(true);" [disabled]="!multipleWebcamsAvailable">Siguiente Cam</button>
+                
+                <br/>  
+              </div>
+            </form>
+              <div class="row form-group align-items-center"><input id="cameraSwitchCheckbox" class="form-control col-md-4" type="checkbox" [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label></div>
+                DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px">
+                <button (click)="showNextWebcam(deviceId);">Activate</button>
+              </div>
+            
+          </div>
+        </div>
+        <div class="snapshot" *ngIf="webcamImage">
+          <h2>Nice one!</h2>
+          <img [src]="webcamImage.imageAsDataUrl"/>
+        </div>
+        
+        <h4 *ngIf="errors.length > 0">Messages:</h4>
+        <ul *ngFor="let error of errors">
+          <li>{{error | json}}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="deactivateCam()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel2"> Foto Cliente</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+        <div class="snapshot" *ngIf="webcamImage">
+          <h2>Nice one!</h2>
+          <img [src]="webcamImage.imageAsDataUrl"/>
+        </div>
+        
+        <h4 *ngIf="errors.length > 0">Messages:</h4>
+        <ul *ngFor="let error of errors">
+          <li>{{error | json}}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Guardar Foto</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="activateCam()">De nuevo</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
